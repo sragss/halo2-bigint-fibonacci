@@ -162,6 +162,8 @@ pub fn run(plot: bool, mock: bool, n: usize) {
             Err(e) => panic!("{:#?}", e)
         }
 
+        println!("N: {}", n);
+        println!("K: {}", k);
         println!("Keygen time: {}ms", keygen_time.as_millis());
         println!("Proof time: {}ms", proof_time.as_millis());
     }
@@ -198,8 +200,8 @@ fn keygen(k: u32) -> (ParamsIPA<EqAffine>, ProvingKey<EqAffine>) {
 
 // Rough estimate
 fn calc_k(fib_steps: usize) -> u32 {
-    let n = 500 * fib_steps;
-    return fast_math::log2(n as f32).ceil() as u32 + 1;
+    let n = fib_steps * fib_steps;
+    return fast_math::log2(n as f32).ceil() as u32 + 4;
 }
 
 #[test]
