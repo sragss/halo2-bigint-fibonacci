@@ -1,0 +1,22 @@
+[package]
+name = "halo2_bigint_fib"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num-integer = "0.1"
+rand_core = { version = "0.6", default-features = false }
+group = "0.12"
+plotters = "0.3.4"
+fast-math = "0.1"
+halo2_proofs = { package = "halo2_proofs", git = "https://github.com/privacy-scaling-explorations/halo2", features = ["dev-graph"], tag = "v2022_09_10"}
+# maingate = { git = "https://github.com/privacy-scaling-explorations/halo2wrong", tag = "v2022_09_09"}
+maingate = { git = "https://github.com/privacy-scaling-explorations/halo2wrong", version = "0.1.0", rev = "ed953b054b906b64787dc9a8cbefc0db4be9f8fa"}
+halo2curves = {git = "https://github.com/privacy-scaling-explorations/halo2curves"}
+clap = { version = "4.0", features = ["derive"] }
+halo2wrong = { git = "https://github.com/privacy-scaling-explorations/halo2wrong", version = "0.1.0"}
+num-bigint = { version = "0.4", features = ["rand"] }
+halo2-rsa = { git = "https://github.com/SoraSuegami/halo2_rsa"}
+rand = "0.8.5"
