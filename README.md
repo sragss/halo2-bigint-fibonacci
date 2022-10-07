@@ -5,6 +5,8 @@ It's a bit of a mess at the moment... wanted some early results.
 
 Uses the [PSE halo2 fork](https://github.com/privacy-scaling-explorations/halo2) which allows IPA or KZG backends.
 
+All Halo2 BigInt math thanks to Sora Suegami's [halo2_rsa](https://github.com/SoraSuegami/halo2_rsa).
+
 # Current Results
 - n=10: 1.4s proof
 - n=50: 5s proof

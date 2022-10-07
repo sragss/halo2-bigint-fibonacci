@@ -26,7 +26,7 @@ struct BigFibCircuit<F: FieldExt> {
 
 impl<F: FieldExt> BigFibCircuit<F> {
     const LIMB_WIDTH: usize = 64;
-    const BITS_LEN: usize = 512;
+    const BITS_LEN: usize = 256;
     fn bigint_chip(&self, config: BigIntConfig) -> BigIntChip<F> {
         BigIntChip::new(config, Self::LIMB_WIDTH, Self::BITS_LEN)
     }
