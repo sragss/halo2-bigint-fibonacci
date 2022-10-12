@@ -113,9 +113,10 @@ use halo2wrong::halo2::dev::MockProver;
 use halo2wrong::curves::pasta::Fp as PastaFp;
 use halo2_proofs::plonk::{create_proof, keygen_vk, keygen_pk};
 
-pub fn run(plot: bool, mock: bool, n: usize) {
+pub fn run(plot: bool, mock: bool, n: usize, k: u32) -> Result<(), Error> {
     let final_sum = utils::big_fib_calc(n);
 
+    println!("Result: {}", &final_sum.clone());
     let circuit = BigFibCircuit::<PastaFp> {
         init_a: BigUint::from(0u8),
         init_b: BigUint::from(1u8),
@@ -125,12 +126,15 @@ pub fn run(plot: bool, mock: bool, n: usize) {
     };
 
     let public_inputs = vec![vec![]];
-    let k = calc_k(n);
+    // let k = calc_k(n);
+
+    println!("N: {}", n);
+    println!("K: {}", k);
 
     if mock {
         let prover = match MockProver::run(k, &circuit, public_inputs) {
             Ok(prover) => prover,
-            Err(e) => panic!("{:#?}", e),
+            Err(e) => return Err(e),
         };
         assert_eq!(prover.verify().is_err(), false);
     } else {
@@ -150,22 +154,23 @@ pub fn run(plot: bool, mock: bool, n: usize) {
             &mut transcript,
         ) {
             Ok(()) => (),
-            Err(e) => panic!("{:#?}", e),
+            Err(e) => return Err(e),
         }
         let proof = transcript.finalize();
         let proof_time = pre_proof.elapsed();
 
+        let pre_ver_time = Instant::now();
         let strategy = SingleStrategy::new(&params);
         let mut ver_transcript = Blake2bRead::<_, _, Challenge255<_>>::init(&proof[..]);
         match verify_proof(&params, pk.get_vk(), strategy, &[&[&[]]], &mut ver_transcript) {
             Ok(()) => println!("Verified!"),
-            Err(e) => panic!("{:#?}", e)
+            Err(e) => return Err(e),
         }
+        let ver_elapsed = pre_ver_time.elapsed();
 
-        println!("N: {}", n);
-        println!("K: {}", k);
         println!("Keygen time: {}ms", keygen_time.as_millis());
         println!("Proof time: {}ms", proof_time.as_millis());
+        println!("Verificaiton time: {}ms", ver_elapsed.as_millis());
     }
 
     if plot {
@@ -182,6 +187,8 @@ pub fn run(plot: bool, mock: bool, n: usize) {
         //     .unwrap();
         println!("Plot rendered to {}", plot_name);
     }
+
+    Ok(())
 }
 
 fn keygen(k: u32) -> (ParamsIPA<EqAffine>, ProvingKey<EqAffine>) {
