@@ -126,7 +126,7 @@ pub fn run(plot: bool, mock: bool, n: usize, k: u32) -> Result<(), Error> {
     };
 
     let public_inputs = vec![vec![]];
-    // let k = calc_k(n);
+    let k = calc_k(n);
 
     println!("N: {}", n);
     println!("K: {}", k);
@@ -205,10 +205,21 @@ fn keygen(k: u32) -> (ParamsIPA<EqAffine>, ProvingKey<EqAffine>) {
     (params, pk)
 }
 
-// Rough estimate
+// Derived experimentally
 fn calc_k(fib_steps: usize) -> u32 {
-    let n = fib_steps * fib_steps;
-    return fast_math::log2(n as f32).ceil() as u32 + 4;
+    if fib_steps > 700  {
+        panic!("idk fib_steps > 700");
+    } else if fib_steps > 500 {
+        return 21;
+    } else if fib_steps > 400 {
+        return 20;
+    } else if fib_steps > 250{
+        return 19;
+    } else if fib_steps > 150 {
+        return 18;
+    } else {
+        return 17;
+    }
 }
 
 #[test]
